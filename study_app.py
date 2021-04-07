@@ -1,5 +1,17 @@
 import time
 
+def countdown(t):
+      while t:
+        mins, secs = divmod(t, 60) # divmod(x, y) x is numerator, y is denominator, this returns a tuple of quotient and remainder
+        timer = '{:02d}:{:02d}'.format(mins, secs)
+        print('Currently studying', subj, timer, end="\r")
+        time.sleep(1)
+        t -= 1
+      print('Session complete.')
+
+      
+
+
 print('\nMy Py Study App Version 1.0') # print version of app
 print('Developed by Xandre9') # me
 print('') # spacer
@@ -31,20 +43,12 @@ while True:
   time_query = input("Enter number of desired timing method: ")
   time_query = int(time_query)
   if time_query == 1:
-    def countdown(t):
-      while t:
-        mins, secs = divmod(t, 60) # divmod(x, y) x is numerator, y is denominator, this returns a tuple of quotient and remainder
-        timer = '{:02d}:{:02d}'.format(mins, secs)
-        print('Currently studying', subj, timer, end="\r")
-        time.sleep(1)
-        t -= 1
-      print('Session complete.')
-
-      t = input('What is the duration of this session? Enter in minutes: ')
-      t = int(t)
+    t = input('What is the duration of this session? Enter in minutes: ')
+    t = int(t)
+    countdown(t)
 # t = t * 60
     
-    countdown(t)
+  
   elif menu_prompt == 2:
     print('\nOkay, review past sessions.')
 
