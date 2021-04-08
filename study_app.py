@@ -1,5 +1,6 @@
 import time
 
+# countdown function
 def countdown(t):
       while t:
         mins, secs = divmod(t, 60) # divmod(x, y) x is numerator, y is denominator, this returns a tuple of quotient and remainder
@@ -9,25 +10,28 @@ def countdown(t):
         t -= 1
       print('Session complete.')
 
-      
-
-
+# header   
 print('\nMy Py Study App Version 1.0') # print version of app
 print('Developed by Xandre9') # me
 print('') # spacer
 
 # menu prompt
 # create prompt that displays choices
-print("--------------------------------------------------")
-print("| 1. Start New Session                           |")
-print("| 2. Review Prior Sessions                       |")                  
-print("| 3. Exit                                        |")
-print("--------------------------------------------------")
-menu_prompt = input("\nPlease enter a number from above to continue: ")
-menu_prompt = int(menu_prompt)
+def menu_prompt():
+  print("                       Menu                       ")
+  print("--------------------------------------------------")
+  print("| 1. Start New Session                           |")
+  print("| 2. Review Prior Sessions                       |")                  
+  print("| 3. Exit                                        |")
+  print("--------------------------------------------------")
+  menu_prompt = input("\nPlease enter a number from above to continue: ")
+  menu_prompt = int(menu_prompt)
+  return menu_prompt
+
+menu_selection = menu_prompt()
 
 while True:
-  if menu_prompt == 1:
+  if menu_selection == 1:
     print("\nSubject Archive")
 
   # subjects studies should be listed by numbers and subject i.e.
@@ -49,8 +53,11 @@ while True:
 # t = t * 60
     
   
-  elif menu_prompt == 2:
+  elif menu_selection == 2:
     print('\nOkay, review past sessions.')
+
+  elif menu_selection == 3:
+    quit
 
 # study bank
 # to be opened if #2 from above is selected
