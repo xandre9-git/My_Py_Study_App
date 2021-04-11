@@ -1,4 +1,6 @@
 import time
+from study_data import py_study_data
+from subject_list import py_subj_list
 
 # countdown function
 # counts down time of session
@@ -51,13 +53,18 @@ while True:
   if menu_selection == 1: # option 1
     print("\nSubject Archive")
 
-    placeholder_dict = {1: 'Python', 2: 'JavaScript', 3: 'HTML & CSS'} # current dictionary (need to program a LIST that can be updated in this section)
-    subject_archive = open('subject_list.txt', 'r')
-    for line in subject_archive:
-      print(line)
+    # placeholder_dict = {1: 'Python', 2: 'JavaScript', 3: 'HTML & CSS'} # current dictionary (need to program a LIST that can be updated in this section)
+    # subject_archive = open('subject_list.txt', 'r')
+    # for line in subject_archive:
+    #   print(line)
 
-    for k,v in placeholder_dict.items():
-      print(k,'.', ' ', v,sep="") # print numbered list of archive
+    # for k,v in placeholder_dict.items():
+    #   print(k,'.', ' ', v,sep="") # print numbered list of archive
+
+    count = 0
+    for i in py_subj_list:
+      count += 1
+      print(count,". ", i, sep="")
   
     subj = input('\nWhat will you study? Enter corresponding number of subject from archive or type in a new subject. (Enter "quit" to exit) \n')    
     if subj == "quit" : 
@@ -65,7 +72,10 @@ while True:
       quit()
     else:
       subj = int(subj) # if number of prior sesssion is selected, convert to integer
-      current_val = get_val(subj, placeholder_dict) # uses integer key value of placeholder_dict, gets its value from respective dictionary, and stores in  new var
+      # current_val = get_val(subj, placeholder_dict) # uses integer key value of placeholder_dict, gets its value from respective dictionary, and stores in  new var
+
+      subj = subj - 1 # convert selection to index counting
+
       print("\nTimer Type\n1. Countdown\n2. Stopwatch\n") # displays timer selection
     time_query = input("Enter number of desired timing method: ")
     time_query = int(time_query)
@@ -101,34 +111,27 @@ while True:
 # implement option to either have stopwatch or countdown session
 # a pause/resume feature needs to be implemented
 
+  # current session subject and duration dictionary
   session = dict() # create dictionary for current session
-  subject_bank = list()
-  session[current_val] = t # store subject as key and time of session as its value
-  subject_bank.append(current_val)
-  print('You studied', current_val, 'for', t, 'minute(s).')
+  session[py_subj_list[subj]] = t # store subject as key and time of session as its value
+  print(session)
+
+  # store in dict as new entry, if it already exists, add to it. (get method)
+  print(py_study_data)
+
   session_data = str(session) # convert dictionary into string
-  print(session_data)
   study_data.write(session_data) # write dictionary with subject and duration into study_data.txt (What if the subject already exists? How to add to existing subject and duration)
   study_data.close()
+
+  # current session subject list
+  subject_bank = list() # create list for current subject studied
+  subject_bank.append(current_val)
   subject_entry = str(subject_bank)
-  print(subject_entry)
   subject_list.write(subject_entry)
   subject_list.close()
+
+
   
+  # study session summary
+  print('You studied', current_val, 'for', t, 'minute(s).')
   
-
-
-
-# at end of session prompt user to either (close program, view study archive, restart session)
-
-
-# placeholder_dict = {1: 'Python', 2: 'JavaScript', 3: 'HTML & CSS'}
-
-# for k,v in placeholder_dict.items():
-#   print(k,'.', ' ', v,sep="")
-
-# subj = input('\nWhat will you study? Enter corresponding number of subject from archive or type in a new subject. (Enter "quit" to exit) \n')
-# subj = int(subj)
-# print(placeholder_dict[subj])
-
-# if placeholder_dict[subj] == placeholder_dict.keys() : print('Never give up.')
