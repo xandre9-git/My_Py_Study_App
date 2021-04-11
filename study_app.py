@@ -71,10 +71,14 @@ while True:
       print("Winners don't quit.")
       quit()
     else:
-      subj = int(subj) # if number of prior sesssion is selected, convert to integer
-      # current_val = get_val(subj, placeholder_dict) # uses integer key value of placeholder_dict, gets its value from respective dictionary, and stores in  new var
+      try:
+        subj = int(subj) # if number of prior sesssion is selected, convert to integer
+        current_val = get_val(subj, py_study_data) # uses integer key value of placeholder_dict, gets its value from respective dictionary, and stores in  new var
 
-      subj = subj - 1 # convert selection to index counting
+        subj = subj - 1 # convert selection to index counting
+      except:
+        subj = subj
+        # print(subj)
 
       print("\nTimer Type\n1. Countdown\n2. Stopwatch\n") # displays timer selection
     time_query = input("Enter number of desired timing method: ")
@@ -113,27 +117,38 @@ while True:
 
   # current session subject and duration dictionary
   session = dict() # create dictionary for current session
-  session[py_subj_list[subj]] = t # store subject as key and time of session as its value
-  print(session)
+  subject_bank = list() # create list for current subject studied
+ 
+  if isinstance(subj, (int, float)) == True: 
+    session[py_subj_list[subj]] = t # store subject as key and time of session as its value
+    # print(session)
+    subject_bank.append(py_subj_list[subj])
+    # print('py study data', py_study_data)
+    # subj =+ 1
+    # print('subj #', subj)
+    # study_val = get_val(subj, py_study_data)
+    # print('study val', study_val)
+    # subject_bank.append(study_val)
+    # print(subject_bank, 'new entry')
+  else: 
+    session[subj] = t
+    subject_bank.append(subj)
+  # print(session)
 
   # store in dict as new entry, if it already exists, add to it. (get method)
-  print(py_study_data)
+  # print(py_study_data)
 
-  from study_app export py_study_data
+  # from study_app export py_study_data
 
   session_data = str(session) # convert dictionary into string
   study_data.write(session_data) # write dictionary with subject and duration into study_data.txt (What if the subject already exists? How to add to existing subject and duration)
   study_data.close()
 
   # current session subject list
-  subject_bank = list() # create list for current subject studied
-  subject_bank.append(current_val)
   subject_entry = str(subject_bank)
   subject_list.write(subject_entry)
   subject_list.close()
-
-
   
   # study session summary
-  print('You studied', current_val, 'for', t, 'minute(s).')
+  print('You studied', subject_bank[len(subject_bank)-1], 'for', t, 'minute(s).')
   
