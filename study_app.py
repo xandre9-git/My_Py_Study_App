@@ -1,14 +1,14 @@
 import time
 
 # countdown function
-# countsdown time of session
+# counts down time of session
 def countdown(t):
       while t:
         mins, secs = divmod(t, 60) # divmod(x, y) x is numerator, y is denominator, this returns a tuple of quotient and remainder
-        timer = '{:02d}:{:02d}'.format(mins, secs)
-        print('Session in progress: ', timer, end="\r")
-        time.sleep(1)
-        t -= 1
+        timer = '{:02d}:{:02d}'.format(mins, secs) # {:d} is a formatting character, treat argument as an integer with two digits, d stands for decimal integer, (base 10)
+        print('Session in progress: ', timer, end="\r") # \r is carriage return, print function by default has end=\n, can be changed.
+        time.sleep(1) # sleep method suspends execution for specified time in seconds
+        t -= 1 # with each loop decrease t by 1
       print('\nSession complete.')
 
 # menu prompt function
@@ -26,30 +26,35 @@ def menu_prompt():
 
 # key selector function for values in dictionary
 def get_key(val, dict):
-  for key, value in dict.items():
-    if val == value:
-      return key
+  for key, value in dict.items(): # for each key and value in items of dictionary...
+    if val == value: # if val arg matches value
+      return key # return its key
 
-  return "key doesn't exist"
+  return "key doesn't exist" # if no key matches value print this
 
 # value selector function for keys in dictionary
 def get_val(k, dict):
-  for key, value in dict.items():
-    if k == key:
-      return value
+  for key, value in dict.items(): # for each key and value in dictionary
+    if k == key: # if argument matches key
+      return value # print its value
 
-  return "value doesn't exist"
+  return "value doesn't exist" # otherwise print this
 
 # start of program   
 print('\nMy Py Study App Version 1.0') # print version of app
 print('Developed by Xandre9') # me
 print('') # spacer
 
+# default sequence is created with while loop
 while True:
   menu_selection = menu_prompt() # run menu screen selection
-  if menu_selection == 1:
+  if menu_selection == 1: # option 1
     print("\nSubject Archive")
-    placeholder_dict = {1: 'Python', 2: 'JavaScript', 3: 'HTML & CSS'}
+
+    placeholder_dict = {1: 'Python', 2: 'JavaScript', 3: 'HTML & CSS'} # current dictionary (need to program a LIST that can be updated in this section)
+    subject_archive = open('subject_list.txt', 'r')
+    for line in subject_archive:
+      print(line)
 
     for k,v in placeholder_dict.items():
       print(k,'.', ' ', v,sep="") # print numbered list of archive
@@ -85,38 +90,45 @@ while True:
 # study bank
 # to be opened if #2 from above is selected
 
-  study_data = open('study_data.txt', 'wt') # plan is to open database of study sessions with subject and duration studied (in hours:mins)
+  study_data = open('study_data.txt', 'a') # opens study data text file which will be used to store subject and duration of session
+  subject_list = open('subject_list.txt', 'a') # opens subject list file which will be used to store only subject
 
+# plan is to open database of study sessions with subject and duration studied (in hours:mins)
 # need to program numbered or text menu option to offer selections (start session, bank, stats,)
-
 # print("Study Bank\n") 
 # print(read_data.read()) # displays subjects studied
-
 # countdown vs stopwatch
-
 # implement option to either have stopwatch or countdown session
-
 # a pause/resume feature needs to be implemented
 
-  session = dict()
-  session[current_val] = t
-  # print(session.get(subj))
-  print('You studied', current_val, 'for', session.get(subj), 'minute(s).')
-  data = str(session)
-  study_data.write(data)
+  session = dict() # create dictionary for current session
+  subject_bank = list()
+  session[current_val] = t # store subject as key and time of session as its value
+  subject_bank.append(current_val)
+  print('You studied', current_val, 'for', t, 'minute(s).')
+  session_data = str(session) # convert dictionary into string
+  print(session_data)
+  study_data.write(session_data) # write dictionary with subject and duration into study_data.txt (What if the subject already exists? How to add to existing subject and duration)
+  study_data.close()
+  subject_entry = str(subject_bank)
+  print(subject_entry)
+  subject_list.write(subject_entry)
+  subject_list.close()
+  
+  
 
 
 
 # at end of session prompt user to either (close program, view study archive, restart session)
 
 
-placeholder_dict = {1: 'Python', 2: 'JavaScript', 3: 'HTML & CSS'}
+# placeholder_dict = {1: 'Python', 2: 'JavaScript', 3: 'HTML & CSS'}
 
-for k,v in placeholder_dict.items():
-  print(k,'.', ' ', v,sep="")
+# for k,v in placeholder_dict.items():
+#   print(k,'.', ' ', v,sep="")
 
-subj = input('\nWhat will you study? Enter corresponding number of subject from archive or type in a new subject. (Enter "quit" to exit) \n')
-subj = int(subj)
-print(placeholder_dict[subj])
+# subj = input('\nWhat will you study? Enter corresponding number of subject from archive or type in a new subject. (Enter "quit" to exit) \n')
+# subj = int(subj)
+# print(placeholder_dict[subj])
 
-if placeholder_dict[subj] == placeholder_dict.keys() : print('Never give up.')
+# if placeholder_dict[subj] == placeholder_dict.keys() : print('Never give up.')
