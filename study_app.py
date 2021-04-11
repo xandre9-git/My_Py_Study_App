@@ -119,6 +119,8 @@ while True:
   # store in dict as new entry, if it already exists, add to it. (get method)
   print(py_study_data)
 
+  from study_app export py_study_data
+
   session_data = str(session) # convert dictionary into string
   study_data.write(session_data) # write dictionary with subject and duration into study_data.txt (What if the subject already exists? How to add to existing subject and duration)
   study_data.close()
