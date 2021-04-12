@@ -1,4 +1,5 @@
 import time
+import pickle
 from study_data import py_study_data
 from subject_list import py_subj_list
 
@@ -60,11 +61,13 @@ while True:
 
     # for k,v in placeholder_dict.items():
     #   print(k,'.', ' ', v,sep="") # print numbered list of archive
+    pickle_in = open("study_data.pickle", 'rb')
+    test_dict = pickle.load(pickle_in)
 
     count = 0
-    for i in py_subj_list:
+    for k,v in test_dict.items():
       count += 1
-      print(count,". ", i, sep="")
+      print(count,". ", k, sep="")
   
     subj = input('\nWhat will you study? Enter corresponding number of subject from archive or type in a new subject. (Enter "quit" to exit) \n')    
     if subj == "quit" : 
@@ -104,8 +107,8 @@ while True:
 # study bank
 # to be opened if #2 from above is selected
 
-  study_data = open('study_data.txt', 'a') # opens study data text file which will be used to store subject and duration of session
-  subject_list = open('subject_list.txt', 'a') # opens subject list file which will be used to store only subject
+  # study_data = open('study_data.txt', 'a') # opens study data text file which will be used to store subject and duration of session
+  # subject_list = open('subject_list.txt', 'a') # opens subject list file which will be used to store only subject
 
 # plan is to open database of study sessions with subject and duration studied (in hours:mins)
 # need to program numbered or text menu option to offer selections (start session, bank, stats,)
@@ -139,15 +142,21 @@ while True:
   # print(py_study_data)
 
   # from study_app export py_study_data
+  py_study_data.update(session)
 
+  fhand = open('study_data.pickle', 'wb')
+  pickle.dump(py_study_data, fhand)
+  fhand.close()
+
+  print(py_study_data)
   session_data = str(session) # convert dictionary into string
-  study_data.write(session_data) # write dictionary with subject and duration into study_data.txt (What if the subject already exists? How to add to existing subject and duration)
-  study_data.close()
+  # study_data.write(session_data) # write dictionary with subject and duration into study_data.txt (What if the subject already exists? How to add to existing subject and duration)
+  # study_data.close()
 
   # current session subject list
   subject_entry = str(subject_bank)
-  subject_list.write(subject_entry)
-  subject_list.close()
+  # subject_list.write(subject_entry)
+  # subject_list.close()
   
   # study session summary
   print('You studied', subject_bank[len(subject_bank)-1], 'for', t, 'minute(s).')
