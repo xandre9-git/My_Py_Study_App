@@ -1,7 +1,5 @@
 import time
 import pickle
-from study_data import py_study_data
-from subject_list import py_subj_list
 
 # countdown function
 # counts down time of session
@@ -54,13 +52,6 @@ while True:
   if menu_selection == 1: # option 1
     print("\nSubject Archive")
 
-    # placeholder_dict = {1: 'Python', 2: 'JavaScript', 3: 'HTML & CSS'} # current dictionary (need to program a LIST that can be updated in this section)
-    # subject_archive = open('subject_list.txt', 'r')
-    # for line in subject_archive:
-    #   print(line)
-
-    # for k,v in placeholder_dict.items():
-    #   print(k,'.', ' ', v,sep="") # print numbered list of archive
     pickle_in = open("study_data.pickle", 'rb')
     test_dict = pickle.load(pickle_in)
 
@@ -68,6 +59,10 @@ while True:
     for k,v in test_dict.items():
       count += 1
       print(count,". ", k, sep="")
+    
+    subj_list = list()
+    for k, v in test_dict.items():
+      subj_list.append(k)
   
     subj = input('\nWhat will you study? Enter corresponding number of subject from archive or type in a new subject. (Enter "quit" to exit) \n')    
     if subj == "quit" : 
@@ -76,12 +71,14 @@ while True:
     else:
       try:
         subj = int(subj) # if number of prior sesssion is selected, convert to integer
-        current_val = get_val(subj, py_study_data) # uses integer key value of placeholder_dict, gets its value from respective dictionary, and stores in  new var
-
+        # current_val = get_val(subj, test_dict) # uses integer key value of placeholder_dict, gets its value from respective dictionary, and stores in  new var
+        # print(current_val)
         subj = subj - 1 # convert selection to index counting
+        subj_list[subj]
+        print(subj_list[subj], 'selected.')
       except:
         subj = subj
-        # print(subj)
+        print('Starting new', subj, 'session.')
 
       print("\nTimer Type\n1. Countdown\n2. Stopwatch\n") # displays timer selection
     time_query = input("Enter number of desired timing method: ")
@@ -123,9 +120,9 @@ while True:
   subject_bank = list() # create list for current subject studied
  
   if isinstance(subj, (int, float)) == True: 
-    session[py_subj_list[subj]] = t # store subject as key and time of session as its value
+    session[subj_list[subj]] = t # store subject as key and time of session as its value
     # print(session)
-    subject_bank.append(py_subj_list[subj])
+    subject_bank.append(subj_list[subj])
     # print('py study data', py_study_data)
     # subj =+ 1
     # print('subj #', subj)
@@ -142,13 +139,13 @@ while True:
   # print(py_study_data)
 
   # from study_app export py_study_data
-  py_study_data.update(session)
+  test_dict.update(session)
 
   fhand = open('study_data.pickle', 'wb')
-  pickle.dump(py_study_data, fhand)
+  pickle.dump(test_dict, fhand)
   fhand.close()
 
-  print(py_study_data)
+  # print(test_dict)
   session_data = str(session) # convert dictionary into string
   # study_data.write(session_data) # write dictionary with subject and duration into study_data.txt (What if the subject already exists? How to add to existing subject and duration)
   # study_data.close()
