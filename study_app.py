@@ -1,5 +1,6 @@
 import time
 import pickle
+import sys, select, os
 
 # countdown function
 # counts down time of session
@@ -12,14 +13,26 @@ def countdown(t):
         t -= 1 # with each loop decrease t by 1
       print('\nSession complete.')
 
-def stopwatch(t):
-      while t:
-        t = 0
-        timer = '{:02d}:{:02d}'.format()
-        print('Session in progress: ', timer, end="\r")
-        time.sleep(1)
-        t += 1
-      print('\nSession complete.')
+# stopwatch function
+def stopwatch():
+ start = input("Press enter to start the stopwatch.")
+ begin = time.time() # begin stopwatch
+ count = 0 # init counter
+ while True:
+    os.system('cls' if os.name == 'nt' else 'clear') # allows listening for enter key press
+    mins, secs = divmod(count, 60) # quotient and remainder
+    stopwatch = '{:02d}:{:02d}'.format(mins, secs) # stopwatch time format
+    print('Press enter again to stop the stopwatch.', stopwatch, end='\r')
+    if sys.stdin in select.select([sys.stdin], [], [], 0)[0]:
+      line = input()
+      break
+    count += 1
+    time.sleep(1)
+ end = time.time()
+ elapsed = end - begin
+ elapsed = int(elapsed)
+ print('\nSession complete. Time elapsed was', elapsed, 'second(s).')
+ return elapsed
 
 # menu prompt function
 # create prompt that displays choices
@@ -109,8 +122,7 @@ while True:
     elif time_query == 2: 
       # print("Feature not currently implemented. Please restart selections.\n")
       # continue
-      t = 0
-      stopwatch(t)
+      t = stopwatch()
   
   # plan is to open database of study sessions with subject and duration studied (in hours:mins)
   # allow delete function
