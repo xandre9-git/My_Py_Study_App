@@ -66,6 +66,15 @@ def get_val(k, dict):
 
   return "value doesn't exist" # otherwise print this
 
+# dictionary value append function
+def append_value(dict, key, value):
+  if key in dict: # check if key is already in dict
+    if not isinstance(dict[key], list): # if key is in dict but not a list.
+      dict[key] = [dict[key]] # make list with key as element
+      dict[key].append(value) # append value to dictionary's key
+  else:
+    dict[key] = value # if key not in dict, add key and value
+
 # load prior session data from pickle
 pickle_in = open("study_data.pickle", 'rb') # opens pickle file in read binary mode
 test_dict = pickle.load(pickle_in) # loads pickle data into new dictionary var
@@ -96,7 +105,7 @@ while True:
       subj_list.append(k)
   
     # user query
-    subj = input('\nWhat will you study? Enter corresponding number of subject from archive or type in a new subject. (Enter "quit" to exit) \n')    
+    subj = input('\nWhat will you practice? Enter corresponding number of subject from archive or type in a new discipline. (Enter "quit" to exit) \n')    
     if subj == "quit" : 
       print("Winners don't quit.")
       quit()
@@ -122,7 +131,7 @@ while True:
       print('Countdown timer selected.')
       t = input('What is the duration of this session? Enter in minutes: ')
       t = int(t)
-      t = t * 60
+      # t = t * 60
       countdown(t)
 
     # stopwatch selected
@@ -139,11 +148,13 @@ while True:
       session[subj_list[subj]] = t # store subject as key and time of session as its value
       subject_bank.append(subj_list[subj])
 
-    else: 
-      session[subj] = t
+    else: # for new subjects
+      session[subj] = t # set new session subject key with value as time
       subject_bank.append(subj)
 
-    test_dict.update(session)
+    # currently this is replacing the duration of study session, in future it will need to add to it.
+    
+    append_value(test_dict, subject_bank[len(subject_bank)-1], t)
 
     fhand = open('study_data.pickle', 'wb')
     pickle.dump(test_dict, fhand)
@@ -179,7 +190,7 @@ while True:
     subj = int(subj)
     subj = subj - 1
     print(subj_list[subj],'selected.')
-    print('You have studied', subj_list[subj], 'for a total of', time_list[subj])
+    print('You have practiced', subj_list[subj], 'for a total of', time_list[subj], 'second(s).')
     
     # prompt user if they would like to delete data.')
 
