@@ -16,28 +16,30 @@ def countdown(t):
 
 # stopwatch function
 def stopwatch():
- start = input("Press enter to start the stopwatch.")
+ start = input("Press enter to start the stopwatch and enter again to stop.")
  begin = time.time() # begin stopwatch
  count = 0 # init counter
  while True:
-    os.system('cls' if os.name == 'nt' else 'clear') # allows listening for enter key press
+    # os.system('cls' if os.name == 'nt' else 'clear') # allows listening for enter key press
     mins, secs = divmod(count, 60) # quotient and remainder
     stopwatch = '{:02d}:{:02d}'.format(mins, secs) # stopwatch time format
-    print('Press enter again to stop the stopwatch.', stopwatch, end='\r')
+    print('Session in progress:', stopwatch, end='\r')
+    time.sleep(1)
+    count += 1    
     if sys.stdin in select.select([sys.stdin], [], [], 0)[0]:
       line = input()
       break
-    count += 1
-    time.sleep(1)
- end = time.time()
+    
+ end = time.time() - 1
  elapsed = end - begin
  elapsed = int(elapsed)
- print('\nSession complete.')
+ print('Session complete.')
  return elapsed
 
 # menu prompt function
 # create prompt that displays choices
 def menu_prompt():
+  print('')
   print("                       Menu                       ")
   print("--------------------------------------------------")
   print("| 1. Start New Session                           |")
@@ -71,7 +73,6 @@ test_dict = pickle.load(pickle_in) # loads pickle data into new dictionary var
 # start of program   
 print('\nMy Py Study App Version 1.0') # print version of app
 print('Developed by Xandre9') # me
-print('') # spacer
 
 # default sequence is created with while loop
 while True:
@@ -114,9 +115,11 @@ while True:
 
     # countdown selected
     # need to implement play/pause feature
+    
     time_query = input("Enter number of desired timing method: ")
     time_query = int(time_query)
     if time_query == 1:
+      print('Countdown timer selected.')
       t = input('What is the duration of this session? Enter in minutes: ')
       t = int(t)
       t = t * 60
@@ -125,7 +128,31 @@ while True:
     # stopwatch selected
     # need to implement play/pause feature
     elif time_query == 2: 
+      print('Stopwatch timer selected.')
       t = stopwatch()
+
+      # current session subject and duration dictionary
+    session = dict() # create dictionary for current session
+    subject_bank = list() # create list for current subject studied
+ 
+    if isinstance(subj, (int, float)) == True: 
+      session[subj_list[subj]] = t # store subject as key and time of session as its value
+      subject_bank.append(subj_list[subj])
+
+    else: 
+      session[subj] = t
+      subject_bank.append(subj)
+
+    test_dict.update(session)
+
+    fhand = open('study_data.pickle', 'wb')
+    pickle.dump(test_dict, fhand)
+    fhand.close()
+  
+    # study session summary
+    mins, secs = divmod(t, 60)
+    session_duration = '{:02d}:{:02d}'.format(mins, secs)
+    print('Your', subject_bank[len(subject_bank)-1], 'session duration:', session_duration)
   
   # plan is to open database of study sessions with subject and duration studied (in hours:mins)
   # allow delete function
@@ -133,22 +160,27 @@ while True:
     # header
     print("\nSubject Review")
 
-    # # numbered subject dictionary
-    # count = 0
-    # for k,v in test_dict.items():
-    #   count += 1
-    #   print(count,". ", k, sep="")
+    # numbered subject dictionary
+    count = 0
+    for k,v in test_dict.items():
+      count += 1
+      print(count,". ", k, " - ", v, sep="")
 
-    # # key to list loop
-    # subj_list = list()
-    # for k, v in test_dict.items():
-    #   subj_list.append(k)
+    # key to list loop
+    subj_list = list()
+    for k, v in test_dict.items():
+      subj_list.append(k)
     
-    # subj = input('Enter number of subject for more details and options: ')
-    # subj = int(subj)
-    # subj = subj - 1
-    # print(subj_list[subj],'selected.')
-    exit()
+    time_list = list()
+    for k, v in test_dict.items():
+      time_list.append(v)
+    
+    subj = input('Enter number of subject for more details and options: ')
+    subj = int(subj)
+    subj = subj - 1
+    print(subj_list[subj],'selected.')
+    print('You have studied', subj_list[subj], 'for a total of', time_list[subj])
+    
     # prompt user if they would like to delete data.')
 
   # exit program
@@ -156,26 +188,5 @@ while True:
       print("Thank you for using my program.")
       exit()
 
-  # current session subject and duration dictionary
-  session = dict() # create dictionary for current session
-  subject_bank = list() # create list for current subject studied
- 
-  if isinstance(subj, (int, float)) == True: 
-    session[subj_list[subj]] = t # store subject as key and time of session as its value
-    subject_bank.append(subj_list[subj])
 
-  else: 
-    session[subj] = t
-    subject_bank.append(subj)
-
-  test_dict.update(session)
-
-  fhand = open('study_data.pickle', 'wb')
-  pickle.dump(test_dict, fhand)
-  fhand.close()
-  
-  # study session summary
-  mins, secs = divmod(t, 60)
-  session_duration = '{:02d}:{:02d}'.format(mins, secs)
-  print('Your', subject_bank[len(subject_bank)-1], 'session duration:', session_duration)
   
