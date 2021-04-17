@@ -1,6 +1,7 @@
 import time
 import pickle
 import sys, select, os
+import math
 
 # countdown function
 # counts down time of session
@@ -8,7 +9,7 @@ def countdown(t):
       while t:
         mins, secs = divmod(t, 60) # divmod(x, y) x is numerator, y is denominator, this returns a tuple of quotient and remainder
         timer = '{:02d}:{:02d}'.format(mins, secs) # {:d} is a formatting character, treat argument as an integer with two digits, d stands for decimal integer, (base 10)
-        print('Session in progress: ', timer, end="\r") # \r is carriage return, print function by default has end=\n, can be changed.
+        print('Session in progress:', timer, end="\r") # \r is carriage return, print function by default has end=\n, can be changed.
         time.sleep(1) # sleep method suspends execution for specified time in seconds
         t -= 1 # with each loop decrease t by 1
       print('\nSession complete.')
@@ -31,7 +32,7 @@ def stopwatch():
  end = time.time()
  elapsed = end - begin
  elapsed = int(elapsed)
- print('\nSession complete. Time elapsed was', elapsed, 'second(s).')
+ print('\nSession complete.')
  return elapsed
 
 # menu prompt function
@@ -63,6 +64,10 @@ def get_val(k, dict):
 
   return "value doesn't exist" # otherwise print this
 
+# load prior session data from pickle
+pickle_in = open("study_data.pickle", 'rb') # opens pickle file in read binary mode
+test_dict = pickle.load(pickle_in) # loads pickle data into new dictionary var
+
 # start of program   
 print('\nMy Py Study App Version 1.0') # print version of app
 print('Developed by Xandre9') # me
@@ -74,9 +79,9 @@ while True:
   if menu_selection == 1: # option 1
     print("\nSubject Archive")
 
-    # load prior session data from pickle
-    pickle_in = open("study_data.pickle", 'rb') # opens pickle file in read binary mode
-    test_dict = pickle.load(pickle_in) # loads pickle data into new dictionary var
+    # # load prior session data from pickle
+    # pickle_in = open("study_data.pickle", 'rb') # opens pickle file in read binary mode
+    # test_dict = pickle.load(pickle_in) # loads pickle data into new dictionary var
 
     # numbered subject dictionary
     count = 0
@@ -114,22 +119,37 @@ while True:
     if time_query == 1:
       t = input('What is the duration of this session? Enter in minutes: ')
       t = int(t)
-      # t = t * 60
+      t = t * 60
       countdown(t)
 
     # stopwatch selected
     # need to implement play/pause feature
     elif time_query == 2: 
-      # print("Feature not currently implemented. Please restart selections.\n")
-      # continue
       t = stopwatch()
   
   # plan is to open database of study sessions with subject and duration studied (in hours:mins)
   # allow delete function
   elif menu_selection == 2:
-    print('\nOkay, review past sessions.')
-    print("This will eventually use function that opens up prior study sessions")
+    # header
+    print("\nSubject Review")
+
+    # # numbered subject dictionary
+    # count = 0
+    # for k,v in test_dict.items():
+    #   count += 1
+    #   print(count,". ", k, sep="")
+
+    # # key to list loop
+    # subj_list = list()
+    # for k, v in test_dict.items():
+    #   subj_list.append(k)
+    
+    # subj = input('Enter number of subject for more details and options: ')
+    # subj = int(subj)
+    # subj = subj - 1
+    # print(subj_list[subj],'selected.')
     exit()
+    # prompt user if they would like to delete data.')
 
   # exit program
   elif menu_selection == 3:
@@ -155,5 +175,7 @@ while True:
   fhand.close()
   
   # study session summary
-  print('You studied', subject_bank[len(subject_bank)-1], 'for', t, 'minute(s).')
+  mins, secs = divmod(t, 60)
+  session_duration = '{:02d}:{:02d}'.format(mins, secs)
+  print('Your', subject_bank[len(subject_bank)-1], 'session duration:', session_duration)
   
