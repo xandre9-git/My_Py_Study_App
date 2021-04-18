@@ -175,24 +175,40 @@ while True:
     count = 0
     for k,v in test_dict.items():
       count += 1
-      print(count,". ", k, " - ", v, sep="")
+      print(count,". ", k, sep="")
 
-    # key to list loop
+    # append key to list loop
     subj_list = list()
     for k, v in test_dict.items():
       subj_list.append(k)
     
+    # append value to list loop
     time_list = list()
     for k, v in test_dict.items():
       time_list.append(v)
     
-    subj = input('Enter number of subject for more details and options: ')
+    subj = input('\nEnter number of subject for more details: ')
     subj = int(subj)
     subj = subj - 1
-    print(subj_list[subj],'selected.')
-    print('You have practiced', subj_list[subj], 'for a total of', time_list[subj], 'second(s).')
-    
-    # prompt user if they would like to delete data.')
+    print("\n",subj_list[subj],' selected.', sep="")
+
+    if type(time_list[subj]) is int:
+      print('You have practiced', subj_list[subj], 'for a total of', time_list[subj], 'second(s).')
+    else:
+      print('You have practiced', subj_list[subj], 'for a total of', sum(time_list[subj]), 'second(s).')
+
+    edit_prompt = input("\nWhat would you like to do with this data? \n\nCommand List:\n'del' to remove all data of selected subject\n'rtn' to return to main menu\n")
+
+    if edit_prompt == 'del':
+      confirm_del = input("Please type 'yes' to confirm or 'no' to cancel: ")
+      if confirm_del == 'no':
+        print("Nothing was deleted.")
+        # menu_prompt()    
+      if confirm_del == 'yes':
+        del test_dict[subj_list[subj]]
+
+    if edit_prompt == 'rtn':
+      print('Returning to main menu.')
 
   # exit program
   elif menu_selection == 3:
