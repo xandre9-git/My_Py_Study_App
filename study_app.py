@@ -2,6 +2,7 @@ import time
 import pickle
 import sys, select, os
 import math
+from playsound import playsound
 
 # countdown function
 # counts down time of session
@@ -13,6 +14,12 @@ def countdown(t):
         time.sleep(1) # sleep method suspends execution for specified time in seconds
         t -= 1 # with each loop decrease t by 1
       print('\nSession complete.')
+      while t == 0:
+        print("Press enter to stop alarm.", end='\r')
+        playsound('alarm.mp3')
+        if sys.stdin in select.select([sys.stdin], [], [], 0)[0]:
+          line = input()
+          break
 
 # stopwatch function
 def stopwatch():
@@ -26,7 +33,7 @@ def stopwatch():
     print('Session in progress:', stopwatch, end='\r')
     time.sleep(1)
     count += 1    
-    if sys.stdin in select.select([sys.stdin], [], [], 0)[0]:
+    if sys.stdin in select.select([sys.stdin], [], [], 0)[0]: # allows enter key to cease stopwatch
       line = input()
       break
     
@@ -34,6 +41,7 @@ def stopwatch():
  elapsed = end - begin
  elapsed = int(elapsed)
  print('Session complete.')
+ playsound('temple.mp3')
  return elapsed
 
 # menu prompt function
@@ -152,7 +160,6 @@ while True:
       session[subj] = t # set new session subject key with value as time
       subject_bank.append(subj)
 
-    # currently this is replacing the duration of study session, in future it will need to add to it.
     
     append_value(test_dict, subject_bank[len(subject_bank)-1], t)
 
@@ -165,8 +172,7 @@ while True:
     session_duration = '{:02d}:{:02d}'.format(mins, secs)
     print('Your', subject_bank[len(subject_bank)-1], 'session duration:', session_duration)
   
-  # plan is to open database of study sessions with subject and duration studied (in hours:mins)
-  # allow delete function
+  # review sessions
   elif menu_selection == 2:
     # header
     print("\nSubject Review")
@@ -192,20 +198,27 @@ while True:
     subj = subj - 1
     print("\n",subj_list[subj],' selected.', sep="")
 
+    # this will need to be changed to display dynamic amount of time studied (hours, minutes, and seconds)
     if type(time_list[subj]) is int:
       print('You have practiced', subj_list[subj], 'for a total of', time_list[subj], 'second(s).')
+      # You have practiced s for a total of x hours, y minutes, and z seconds.
     else:
       print('You have practiced', subj_list[subj], 'for a total of', sum(time_list[subj]), 'second(s).')
 
     edit_prompt = input("\nWhat would you like to do with this data? \n\nCommand List:\n'del' to remove all data of selected subject\n'rtn' to return to main menu\n")
 
+    # may program 'avg' option to calculate average length of study sessions.
     if edit_prompt == 'del':
       confirm_del = input("Please type 'yes' to confirm or 'no' to cancel: ")
       if confirm_del == 'no':
         print("Nothing was deleted.")
         # menu_prompt()    
       if confirm_del == 'yes':
+        print(subj_list[subj], 'was deleted from the database.')
         del test_dict[subj_list[subj]]
+        fhand = open('study_data.pickle', 'wb')
+        pickle.dump(test_dict, fhand)
+        fhand.close()
 
     if edit_prompt == 'rtn':
       print('Returning to main menu.')
