@@ -3,6 +3,8 @@ import pickle
 import sys, select, os
 import math
 from playsound import playsound
+from pynput.keyboard import Key, Listener
+
 
 # countdown function
 # counts down time of session
@@ -13,6 +15,13 @@ def countdown(t):
         print('Session in progress:', timer, end="\r") # \r is carriage return, print function by default has end=\n, can be changed.
         time.sleep(1) # sleep method suspends execution for specified time in seconds
         t -= 1 # with each loop decrease t by 1
+        if sys.stdin in select.select([sys.stdin], [], [], 0)[0]: # allows enter key to cease stopwatch
+          line = input()
+          # break
+          pause_it = input("Stopped the countdown. Press 'enter' to resume or type 'end' to quit.\n")
+          if pause_it == 'end':
+            print(t)
+            break
       print('\nSession complete.')
       while t == 0:
         print("Press enter to stop alarm.", end='\r')
@@ -24,22 +33,31 @@ def countdown(t):
 # stopwatch function
 def stopwatch():
  start = input("Press enter to start the stopwatch and enter again to stop.")
- begin = time.time() # begin stopwatch
+#  begin = time.time() # begin stopwatch
  count = 0 # init counter
+ begin = count
  while True:
     # os.system('cls' if os.name == 'nt' else 'clear') # allows listening for enter key press
     mins, secs = divmod(count, 60) # quotient and remainder
     stopwatch = '{:02d}:{:02d}'.format(mins, secs) # stopwatch time format
     print('Session in progress:', stopwatch, end='\r')
     time.sleep(1)
-    count += 1    
+    count += 1
+    
+      #   resume countdown
     if sys.stdin in select.select([sys.stdin], [], [], 0)[0]: # allows enter key to cease stopwatch
       line = input()
-      break
+      # break
+      pause_it = input("Stopped the stopwatch. Press 'enter' to resume or type 'end' to quit.\n")
+
+      if pause_it == 'end':
+        break
+
     
- end = time.time() - 1
+ end = count - 1
  elapsed = end - begin
  elapsed = int(elapsed)
+ print(elapsed)
  print('Session complete.')
  playsound('temple.mp3')
  return elapsed
@@ -141,6 +159,7 @@ while True:
       t = int(t)
       # t = t * 60
       countdown(t)
+      t = countdown(t)
 
     # stopwatch selected
     # need to implement play/pause feature
@@ -181,7 +200,7 @@ while True:
     count = 0
     for k,v in test_dict.items():
       count += 1
-      print(count,". ", k, sep="")
+      print(count,". ", k, ' ', v, sep="")
 
     # append key to list loop
     subj_list = list()
