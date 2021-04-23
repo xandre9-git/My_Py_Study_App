@@ -1,4 +1,3 @@
-# my_py_study_app
 My Py Study App Version 1.0
 Release Date: 4/20/2021
 Developed by Xandre9
@@ -11,13 +10,16 @@ The countdown timer allows the input of desired minutes and begin counting down.
 
 New sessions can be created and later on accessed. There is a review section as well which allows more detailed analysis of prior study sessions and the option of removing entries.
 
+If you find any bugs please notify me.
+
 
 Requirements
 --------------
 Must install playsound module for sound to work: 'pip install playsound'
 https://pypi.org/project/playsound/
 
-p = multiprocessing.Process(target = playsound, args = ('music.mp3',))
-p.start()
-wait = input('press ENTER to stop playback')
-p.terminate()
+
+Upcoming Features
+-----------------
+*Play/Pause feature for stopwatch
+*More detailed study duration information for prior study sessions
