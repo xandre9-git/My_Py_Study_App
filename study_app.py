@@ -9,26 +9,31 @@ from pynput.keyboard import Key, Listener
 # countdown function
 # counts down time of session
 def countdown(t):
+      start_countd = t
+      cur_duration = int(t)
       while t:
         mins, secs = divmod(t, 60) # divmod(x, y) x is numerator, y is denominator, this returns a tuple of quotient and remainder
         timer = '{:02d}:{:02d}'.format(mins, secs) # {:d} is a formatting character, treat argument as an integer with two digits, d stands for decimal integer, (base 10)
         print('Session in progress:', timer, end="\r") # \r is carriage return, print function by default has end=\n, can be changed.
         time.sleep(1) # sleep method suspends execution for specified time in seconds
         t -= 1 # with each loop decrease t by 1
-        if sys.stdin in select.select([sys.stdin], [], [], 0)[0]: # allows enter key to cease stopwatch
-          line = input()
+        if sys.stdin in select.select([sys.stdin], [], [], 0)[0]: # allows enter key to pause stopwatch
+          line = input() # pauses timer
           # break
           pause_it = input("Stopped the countdown. Press 'enter' to resume or type 'end' to quit.\n")
           if pause_it == 'end':
-            print(t)
-            break
-      print('\nSession complete.')
+            cur_duration = start_countd - t - 1
+            t = 0
+            print('\nSession complete.')
       while t == 0:
         print("Press enter to stop alarm.", end='\r')
-        playsound('alarm.mp3')
+        playsound('temple.mp3')
         if sys.stdin in select.select([sys.stdin], [], [], 0)[0]:
           line = input()
           break
+      return cur_duration
+              
+      
 
 # stopwatch function
 def stopwatch():
@@ -44,7 +49,7 @@ def stopwatch():
     time.sleep(1)
     count += 1
     
-      #   resume countdown
+    # resume countdown
     if sys.stdin in select.select([sys.stdin], [], [], 0)[0]: # allows enter key to cease stopwatch
       line = input()
       # break
@@ -53,7 +58,7 @@ def stopwatch():
       if pause_it == 'end':
         break
 
-    
+ 
  end = count - 1
  elapsed = end - begin
  elapsed = int(elapsed)
@@ -115,10 +120,6 @@ while True:
   if menu_selection == 1: # option 1
     print("\nSubject Archive")
 
-    # # load prior session data from pickle
-    # pickle_in = open("study_data.pickle", 'rb') # opens pickle file in read binary mode
-    # test_dict = pickle.load(pickle_in) # loads pickle data into new dictionary var
-
     # numbered subject dictionary
     count = 0
     for k,v in test_dict.items():
@@ -131,7 +132,7 @@ while True:
       subj_list.append(k)
   
     # user query
-    subj = input('\nWhat will you practice? Enter corresponding number of subject from archive or type in a new discipline. (Enter "quit" to exit) \n')    
+    subj = input('\nWhat will you practice? Enter corresponding number of subject from archive or type in a new subject. (Enter "quit" to exit) \n')    
     if subj == "quit" : 
       print("Winners don't quit.")
       quit()
@@ -158,7 +159,6 @@ while True:
       t = input('What is the duration of this session? Enter in minutes: ')
       t = int(t)
       # t = t * 60
-      countdown(t)
       t = countdown(t)
 
     # stopwatch selected
@@ -187,6 +187,7 @@ while True:
     fhand.close()
   
     # study session summary
+    print(t)
     mins, secs = divmod(t, 60)
     session_duration = '{:02d}:{:02d}'.format(mins, secs)
     print('Your', subject_bank[len(subject_bank)-1], 'session duration:', session_duration)
