@@ -1,13 +1,9 @@
 import time
 import pickle
 import sys, select, os
-import math
 from playsound import playsound
-from pynput.keyboard import Key, Listener
-
 
 # countdown function
-# counts down time of session
 def countdown(t):
       start_countd = t
       cur_duration = int(t)
@@ -19,7 +15,6 @@ def countdown(t):
         t -= 1 # with each loop decrease t by 1
         if sys.stdin in select.select([sys.stdin], [], [], 0)[0]: # allows enter key to pause stopwatch
           line = input() # pauses timer
-          # break
           pause_it = input("Stopped the countdown. Press 'enter' to resume or type 'end' to quit.\n")
           if pause_it == 'end':
             cur_duration = start_countd - t - 1
@@ -33,32 +28,23 @@ def countdown(t):
           break
       return cur_duration
               
-      
-
 # stopwatch function
 def stopwatch():
  start = input("Press enter to start the stopwatch and enter again to stop.")
-#  begin = time.time() # begin stopwatch
  count = 0 # init counter
  begin = count
  while True:
-    # os.system('cls' if os.name == 'nt' else 'clear') # allows listening for enter key press
     mins, secs = divmod(count, 60) # quotient and remainder
     stopwatch = '{:02d}:{:02d}'.format(mins, secs) # stopwatch time format
     print('Session in progress:', stopwatch, end='\r')
     time.sleep(1)
     count += 1
-    
-    # resume countdown
     if sys.stdin in select.select([sys.stdin], [], [], 0)[0]: # allows enter key to cease stopwatch
       line = input()
-      # break
       pause_it = input("Stopped the stopwatch. Press 'enter' to resume or type 'end' to quit.\n")
-
       if pause_it == 'end':
         break
 
- 
  end = count - 1
  elapsed = end - begin
  elapsed = int(elapsed)
@@ -68,7 +54,6 @@ def stopwatch():
  return elapsed
 
 # menu prompt function
-# create prompt that displays choices
 def menu_prompt():
   print('')
   print("                       Menu                       ")
@@ -102,7 +87,7 @@ def append_value(dict, key, value):
   if key in dict: # check if key is already in dict
     if not isinstance(dict[key], list): # if key is in dict but not a list.
       dict[key] = [dict[key]] # make list with key as element
-      dict[key].append(value) # append value to dictionary's key
+    dict[key].append(value) # append value to dictionary's key
   else:
     dict[key] = value # if key not in dict, add key and value
 
@@ -148,26 +133,25 @@ while True:
 
       # Timer type
       print("\nTimer Type\n1. Countdown\n2. Stopwatch\n") # displays timer selection
-
-    # countdown selected
-    # need to implement play/pause feature
     
+    # countdown selected
     time_query = input("Enter number of desired timing method: ")
     time_query = int(time_query)
     if time_query == 1:
       print('Countdown timer selected.')
       t = input('What is the duration of this session? Enter in minutes: ')
       t = int(t)
-      # t = t * 60
+      t = t * 60
       t = countdown(t)
 
     # stopwatch selected
-    # need to implement play/pause feature
     elif time_query == 2: 
       print('Stopwatch timer selected.')
       t = stopwatch()
-
-      # current session subject and duration dictionary
+    else:
+      print('Invalid response. Please make sure to select either 1 or 2.')
+      break
+    # current session subject and duration dictionary
     session = dict() # create dictionary for current session
     subject_bank = list() # create list for current subject studied
  
@@ -179,15 +163,13 @@ while True:
       session[subj] = t # set new session subject key with value as time
       subject_bank.append(subj)
 
-    
-    append_value(test_dict, subject_bank[len(subject_bank)-1], t)
 
+    append_value(test_dict, subject_bank[len(subject_bank)-1], t)
     fhand = open('study_data.pickle', 'wb')
     pickle.dump(test_dict, fhand)
     fhand.close()
   
     # study session summary
-    print(t)
     mins, secs = divmod(t, 60)
     session_duration = '{:02d}:{:02d}'.format(mins, secs)
     print('Your', subject_bank[len(subject_bank)-1], 'session duration:', session_duration)
@@ -201,7 +183,7 @@ while True:
     count = 0
     for k,v in test_dict.items():
       count += 1
-      print(count,". ", k, ' ', v, sep="")
+      print(count,". ", k, sep="")
 
     # append key to list loop
     subj_list = list()
@@ -223,7 +205,7 @@ while True:
       print('You have practiced', subj_list[subj], 'for a total of', time_list[subj], 'second(s).')
       # You have practiced s for a total of x hours, y minutes, and z seconds.
     else:
-      print('You have practiced', subj_list[subj], 'for a total of', sum(time_list[subj]), 'second(s).')
+      print('You have practiced', subj_list[subj], 'for a total of:', int(sum(time_list[subj])/3600), 'hour(s),', int(sum(time_list[subj])/60), 'minutes(s), and', int(sum(time_list[subj])), 'second(s).')
 
     edit_prompt = input("\nWhat would you like to do with this data? \n\nCommand List:\n'del' to remove all data of selected subject\n'rtn' to return to main menu\n")
 
@@ -231,8 +213,7 @@ while True:
     if edit_prompt == 'del':
       confirm_del = input("Please type 'yes' to confirm or 'no' to cancel: ")
       if confirm_del == 'no':
-        print("Nothing was deleted.")
-        # menu_prompt()    
+        print("Nothing was deleted.")  
       if confirm_del == 'yes':
         print(subj_list[subj], 'was deleted from the database.')
         del test_dict[subj_list[subj]]
@@ -247,6 +228,7 @@ while True:
   elif menu_selection == 3:
       print("Thank you for using my program.")
       exit()
-
+  else:
+    print('Invalid entry. Response must be a number from 1 to 3.')
 
   
