@@ -195,35 +195,36 @@ while True:
     for k, v in test_dict.items():
       time_list.append(v)
     
-    subj = input('\nEnter number of subject for more details: ')
-    subj = int(subj)
-    subj = subj - 1
-    print("\n",subj_list[subj],' selected.', sep="")
+    try:
+      subj = input('\nEnter number of subject for more details: ')
+      subj = int(subj)
+      subj = subj - 1
+      print("\n",subj_list[subj],' selected.', sep="")
 
-    # this will need to be changed to display dynamic amount of time studied (hours, minutes, and seconds)
-    if type(time_list[subj]) is int:
-      print('You have practiced', subj_list[subj], 'for a total of', time_list[subj], 'second(s).')
-      # You have practiced s for a total of x hours, y minutes, and z seconds.
-    else:
-      print('You have practiced', subj_list[subj], 'for a total of:', int(sum(time_list[subj])/3600), 'hour(s),', int(sum(time_list[subj])/60), 'minutes(s), and', int(sum(time_list[subj])), 'second(s).')
+      if type(time_list[subj]) is int:
+        print('You have practiced', subj_list[subj], 'for a total of', time_list[subj], 'second(s).')
+      else:
+        print('You have practiced', subj_list[subj], 'for a total of:', int(sum(time_list[subj])/3600), 'hour(s),', int(sum(time_list[subj])/60), 'minutes(s), and', int(sum(time_list[subj])), 'second(s).')
 
-    edit_prompt = input("\nWhat would you like to do with this data? \n\nCommand List:\n'del' to remove all data of selected subject\n'rtn' to return to main menu\n")
+      edit_prompt = input("\nWhat would you like to do with this data? \n\nCommand List:\n'del' to remove all data of selected subject\n'rtn' to return to main menu\n")
 
-    # may program 'avg' option to calculate average length of study sessions.
-    if edit_prompt == 'del':
-      confirm_del = input("Please type 'yes' to confirm or 'no' to cancel: ")
-      if confirm_del == 'no':
-        print("Nothing was deleted.")  
-      if confirm_del == 'yes':
-        print(subj_list[subj], 'was deleted from the database.')
-        del test_dict[subj_list[subj]]
-        fhand = open('study_data.pickle', 'wb')
-        pickle.dump(test_dict, fhand)
-        fhand.close()
+    # may program 'avg' option in future to calculate average length of study sessions.
+      if edit_prompt == 'del':
+        confirm_del = input("Please type 'yes' to confirm or 'no' to cancel: ")
+        if confirm_del == 'no':
+          print("Nothing was deleted.")  
+        if confirm_del == 'yes':
+          print(subj_list[subj], 'was deleted from the database.')
+          del test_dict[subj_list[subj]]
+          fhand = open('study_data.pickle', 'wb')
+          pickle.dump(test_dict, fhand)
+          fhand.close()
 
-    if edit_prompt == 'rtn':
-      print('Returning to main menu.')
-
+      if edit_prompt == 'rtn':
+        print('Returning to main menu.')
+    except:
+      print("Invalid response.")
+      continue
   # exit program
   elif menu_selection == 3:
       print("Thank you for using my program.")
