@@ -172,7 +172,7 @@ while True:
     # study session summary
     mins, secs = divmod(t, 60)
     session_duration = '{:02d}:{:02d}'.format(mins, secs)
-    print('Your', subject_bank[len(subject_bank)-1], 'session duration:', session_duration)
+    print('Your ', "'",subject_bank[len(subject_bank)-1],"'", ' session duration: ', session_duration, sep="")
   
   # review sessions
   elif menu_selection == 2:
@@ -204,7 +204,10 @@ while True:
       if type(time_list[subj]) is int:
         print('You have practiced', subj_list[subj], 'for a total of', time_list[subj], 'second(s).')
       else:
-        print('You have practiced', subj_list[subj], 'for a total of:', int(sum(time_list[subj])/3600), 'hour(s),', int(sum(time_list[subj])/60), 'minutes(s), and', int(sum(time_list[subj])), 'second(s).')
+        # print('You have practiced', subj_list[subj], 'for a total of:', int(sum(time_list[subj])/3600), 'hour(s),', int(sum(time_list[subj])/60), 'minutes(s).')
+        min, sec = divmod(int(sum(time_list[subj])), 60)
+        hour, min = divmod(min, 60)
+        print('You have practiced', subj_list[subj], 'for a total of:', "%d:%02d:%02d" % (hour, min, sec))
 
       edit_prompt = input("\nWhat would you like to do with this data? \n\nCommand List:\n'del' to remove all data of selected subject\n'rtn' to return to main menu\n")
 
@@ -223,7 +226,7 @@ while True:
       if edit_prompt == 'rtn':
         print('Returning to main menu.')
     except:
-      print("Invalid response.")
+      print("Invalid response. Please select number within range.")
       continue
   # exit program
   elif menu_selection == 3:
