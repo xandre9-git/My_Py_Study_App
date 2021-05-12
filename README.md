@@ -23,3 +23,20 @@ Known Bugs
 
 If you find any additional bugs please notify me.
 
+Troubleshooting
+----------------
+Sound Not Playing
+-If you have issues getting sound to play in terminal, this could assist.
+1. in terminal type 'sudo nano /etc/modprobe.d/default.conf'
+2. add a line with following code: 'options snd_hda_intel index=1'
+3. save file, exit and reboot
+
+Credits
+--------
+
+Temple sound file
+Mike Koenig
+https://soundbible.com/1531-Temple-Bell.html
+
+Alarm
+
